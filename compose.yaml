@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=uniterm'
+      - 'POSTGRES_PASSWORD=admin'
+      - 'POSTGRES_USER=admin'
+    ports:
+      - '5432:5432'
+    networks:
+      - uniterm-network
+  
+  uniterm-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - uniterm-network
+
+  uniterm-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - "./frontend/src:/app/src"
+    networks:
+      - uniterm-network
+    ports:
+      - "4200:4200"
+    restart: always
+    
+networks:
+  uniterm-network:
+    driver: bridge

@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Add New Uniterm</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="unitermForm">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter uniterm name">
+      <mat-error *ngIf="unitermForm.get('name')?.hasError('required')">
+        Name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Operation Type</mat-label>
+      <mat-select formControlName="operationType">
+        <mat-option *ngFor="let option of operationTypeOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="unitermForm.invalid" (click)="onSave()">
+    Save
+  </button>
+</mat-dialog-actions>

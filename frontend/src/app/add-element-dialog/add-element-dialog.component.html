@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} Uniterm Element</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="elementForm">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Expression A</mat-label>
+      <input matInput formControlName="expressionA" placeholder="Enter expression A">
+      <mat-error *ngIf="elementForm.get('expressionA')?.hasError('required')">
+        Expression A is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Expression B</mat-label>
+      <input matInput formControlName="expressionB" placeholder="Enter expression B">
+      <mat-error *ngIf="elementForm.get('expressionB')?.hasError('required')">
+        Expression B is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Expression C (Optional)</mat-label>
+      <input matInput formControlName="expressionC" placeholder="Enter expression C">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="elementForm.invalid" (click)="onSave()">
+    Save
+  </button>
+</mat-dialog-actions>
