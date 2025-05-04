@@ -25,6 +25,4 @@ public class UnitermElement {
 
     @Column(nullable = false)
     private String expressionB;
-
-    private String expressionC;
 }

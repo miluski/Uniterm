@@ -1,8 +1,7 @@
 <div class="container">
     <div class="uniterm-list">
-      <h2>Uniterms</h2>
-      <button mat-raised-button color="primary" (click)="openAddDialog()">Add Uniterm</button>
-      
+      <h2>Unitermy</h2>
+      <button mat-raised-button color="primary" (click)="openAddDialog()">Dodaj Uniterm</button>
       <mat-list>
         <mat-list-item *ngFor="let uniterm of uniterms" 
                        [class.selected]="uniterm === selectedUniterm"
@@ -11,7 +10,6 @@
         </mat-list-item>
       </mat-list>
     </div>
-    
     <div class="uniterm-editor" *ngIf="selectedUniterm">
       <app-uniterm-editor [uniterm]="selectedUniterm"></app-uniterm-editor>
     </div>

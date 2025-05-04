@@ -62,10 +62,9 @@ export class UnitermVisualizationComponent implements OnInit, OnChanges {
       this.canvasRef.nativeElement.height
     );
     this.ctx.font = `${this.fontSize}px ${this.fontFamily}`;
-    console.log(this.uniterm.operationType == OperationType.PARALLEL);
-    if (this.uniterm.operationType === OperationType.PARALLEL) {
+    if (this.uniterm.operationType == OperationType.PARALLEL) {
       this.drawParallelUniterm();
-    } else if (this.uniterm.operationType === OperationType.SEQUENCE) {
+    } else if (this.uniterm.operationType == OperationType.SEQUENCE) {
       this.drawSequentialUniterm();
     }
   }
@@ -73,167 +72,92 @@ export class UnitermVisualizationComponent implements OnInit, OnChanges {
   drawParallelUniterm() {
     if (!this.uniterm || !this.ctx) return;
     const elements = this.uniterm.elements;
-    if (elements.length === 0) return;
-
-    // Parameters for drawing
+    if (elements.length === 0) {
+      this.ctx.fillText('Dodaj elementy do unitermu', 50, 50);
+      return;
+    }
     const startX = 50;
     const startY = 100;
     const padding = 20;
-    const spacing = 40;
-
-    let totalWidth = 0;
-    let maxHeight = 0;
-
-    // Calculate text dimensions for all elements
-    const elementDimensions = elements.map((element) => {
-      const expressionA = element.expressionA;
-      const expressionB = element.expressionB;
-
-      const textA = this.ctx.measureText(expressionA);
-      const textB = this.ctx.measureText(expressionB);
-
-      const width = Math.max(textA.width, textB.width) + padding * 2;
-      const height = this.fontSize * 3 + padding;
-
-      maxHeight = Math.max(maxHeight, height);
-
-      return { width, height };
-    });
-
-    // Calculate total width
-    totalWidth =
-      elementDimensions.reduce((sum, dim) => sum + dim.width, 0) +
-      spacing * (elements.length - 1);
-
-    // Draw elements side by side horizontally
-    let currentX = startX;
+    let combinedText = '';
     elements.forEach((element, index) => {
-      const dim = elementDimensions[index];
-
-      // Draw individual element container
-      this.ctx.strokeRect(currentX, startY, dim.width, maxHeight);
-
-      // Draw expression A on top
-      this.ctx.fillText(
-        element.expressionA,
-        currentX + padding,
-        startY + this.fontSize + 10
-      );
-
-      // Draw horizontal line between A and B
-      this.ctx.beginPath();
-      this.ctx.moveTo(currentX + 5, startY + this.fontSize + 20);
-      this.ctx.lineTo(currentX + dim.width - 5, startY + this.fontSize + 20);
-      this.ctx.stroke();
-
-      // Draw expression B below
-      this.ctx.fillText(
-        element.expressionB,
-        currentX + padding,
-        startY + this.fontSize * 2 + 20
-      );
-
-      // If not the last element, draw connector
+      combinedText += `${element.expressionA} ; ${element.expressionB}`;
       if (index < elements.length - 1) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(currentX + dim.width, startY + maxHeight / 2);
-        this.ctx.lineTo(
-          currentX + dim.width + spacing / 2,
-          startY + maxHeight / 2
-        );
-        this.ctx.stroke();
+        combinedText += ' ; ';
       }
-
-      // Move to next element position
-      currentX += dim.width + spacing;
     });
-
-    // Add label
+    const textWidth = this.ctx.measureText(combinedText).width;
+    const boxWidth = textWidth + padding * 2;
+    const boxHeight = this.fontSize * 2;
     this.ctx.fillText('zrównoleglenie poziome', startX, startY - 20);
+    this.ctx.beginPath();
+    this.ctx.moveTo(startX, startY);
+    this.ctx.lineTo(startX + boxWidth, startY);
+    this.ctx.moveTo(startX, startY);
+    this.ctx.lineTo(startX, startY + boxHeight / 2);
+    this.ctx.moveTo(startX + boxWidth, startY);
+    this.ctx.lineTo(startX + boxWidth, startY + boxHeight / 2);
+    this.ctx.stroke();
+    this.ctx.fillText(
+      combinedText,
+      startX + padding,
+      startY + boxHeight / 2 + 5
+    );
   }
-
+  
   drawSequentialUniterm() {
     if (!this.uniterm || !this.ctx) return;
     const elements = this.uniterm.elements;
     if (elements.length === 0) return;
-
-    // Parameters for drawing
     const startX = 100;
     const startY = 50;
     const padding = 20;
-    const spacing = 40;
-
-    let maxWidth = 0;
-    let totalHeight = 0;
-
-    // Calculate text dimensions for all elements
-    const elementDimensions = elements.map((element) => {
-      const expressionA = element.expressionA;
-      const expressionB = element.expressionB;
-
-      const textA = this.ctx.measureText(expressionA);
-      const textB = this.ctx.measureText(expressionB);
-
-      const width = Math.max(textA.width, textB.width) + padding * 2;
-      const height = this.fontSize * 3 + padding; // Space for A, semicolon, and B
-
-      maxWidth = Math.max(maxWidth, width);
-
-      return { width, height };
-    });
-
-    // Calculate total height
-    totalHeight =
-      elementDimensions.reduce((sum, dim) => sum + dim.height, 0) +
-      spacing * (elements.length - 1);
-
-    // Draw elements stacked vertically
+    const spacing = 30;
     let currentY = startY;
     elements.forEach((element, index) => {
-      const dim = elementDimensions[index];
-
-      // Draw expression A at the top
-      this.ctx.fillText(element.expressionA, startX, currentY + this.fontSize);
-
-      // Draw semicolon in the middle
-      this.ctx.fillText(';', startX, currentY + this.fontSize * 2);
-
-      // Draw expression B below
-      this.ctx.fillText(
-        element.expressionB,
-        startX,
-        currentY + this.fontSize * 3
-      );
-
-      // Move to next element position
-      currentY += dim.height + spacing;
+      this.ctx.fillText(element.expressionA, startX + padding, currentY + this.fontSize);
+      currentY += spacing;
+      this.ctx.fillText(';', startX + padding, currentY + this.fontSize);
+      currentY += spacing;
+      this.ctx.fillText(element.expressionB, startX + padding, currentY + this.fontSize);
+      if (index < elements.length - 1) {
+        currentY += spacing * 2;
+      }
     });
-
-    // Draw the bracket connecting all elements
-    this.drawVerticalBracket(startX - 20, startY - 10, totalHeight + 20, 10);
-
-    // Add label
+    this.drawCurvedBracket(
+      startX - 10,
+      startY - 10,
+      currentY - startY + this.fontSize * 2
+    );
     this.ctx.fillText(
       'sekwencjonowanie pionowe',
       startX,
-      startY + totalHeight + 30
+      currentY + this.fontSize * 3
     );
+  }
+
+  drawCurvedBracket(x: number, y: number, height: number) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
+    this.ctx.bezierCurveTo(
+      x - 20,
+      y + height / 4,
+      x - 20,
+      y + (3 * height) / 4,
+      x,
+      y + height
+    );
+    this.ctx.stroke();
   }
 
   drawVerticalBracket(x: number, y: number, height: number, width: number) {
     this.ctx.beginPath();
-    // Draw left vertical line
     this.ctx.moveTo(x, y);
     this.ctx.lineTo(x, y + height);
-
-    // Draw top horizontal line
     this.ctx.moveTo(x, y);
     this.ctx.lineTo(x + width, y);
-
-    // Draw bottom horizontal line
     this.ctx.moveTo(x, y + height);
     this.ctx.lineTo(x + width, y + height);
-
     this.ctx.stroke();
   }
 }

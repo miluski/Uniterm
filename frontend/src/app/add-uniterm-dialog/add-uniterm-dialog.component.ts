@@ -27,8 +27,8 @@ export class AddUnitermDialogComponent {
   unitermForm: FormGroup;
   operationTypes = OperationType;
   operationTypeOptions = [
-    { value: OperationType.PARALLEL, label: 'Parallel' },
-    { value: OperationType.SEQUENCE, label: 'Sequence' }
+    { value: OperationType.PARALLEL, label: 'Równolegle' },
+    { value: OperationType.SEQUENCE, label: 'Sekwencyjnie' }
   ];
 
   constructor(

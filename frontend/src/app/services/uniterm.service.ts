@@ -1,7 +1,7 @@
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { OperationType, Uniterm } from "../models/uniterm.model";
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +36,15 @@ export class UnitermService {
       return {
         ...uniterm,
         operationType: OperationType.SEQUENCE,
-        isTransformed: true
+        isTransformed: true,
+        elements: [...uniterm.elements]
       };
     }
     return uniterm;
+  }
+
+  createTransformedUniterm(uniterm: Uniterm): Observable<Uniterm> {
+    const transformed = this.previewTransformation(uniterm);
+    return this.saveUniterm(transformed);
   }
 }

@@ -1,85 +1,84 @@
 <div class="editor-container">
-    <div class="toolbar">
-      <mat-form-field>
-        <mat-label>Font</mat-label>
-        <mat-select [(ngModel)]="fontFamily" (selectionChange)="onFontChange($event.value)">
-          <mat-option value="Arial">Arial</mat-option>
-          <mat-option value="Times New Roman">Times New Roman</mat-option>
-          <mat-option value="Courier New">Courier New</mat-option>
-        </mat-select>
-      </mat-form-field>
-      
-      <mat-form-field>
-        <mat-label>Size</mat-label>
-        <mat-select [(value)]="fontSize" (selectionChange)="onFontSizeChange($event.value)">
-          <mat-option *ngFor="let size of [8,9,10,11,12,14,16,18,20,24,28,32,36,40]" [value]="size">
-            {{size}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      
-      <button mat-raised-button color="primary" [disabled]="!uniterm || uniterm.operationType !== 'PARALLEL'" (click)="previewTransformation()">
-        Podgląd transformacji
-      </button>
-      
-      <button mat-raised-button color="primary" (click)="addElement()">
-        Dodaj element
-      </button>
-    </div>
-    
-    <div class="visualization-area">
-      <h3>Uniterm oryginalny</h3>
-      <app-uniterm-visualization 
-        [uniterm]="uniterm" 
-        [fontFamily]="fontFamily" 
-        [fontSize]="fontSize">
+  <div class="toolbar">
+    <mat-form-field>
+      <mat-label>Czcionka</mat-label>
+      <mat-select
+        [(ngModel)]="fontFamily"
+        (selectionChange)="onFontChange($event.value)"
+      >
+        <mat-option value="Arial">Arial</mat-option>
+        <mat-option value="Times New Roman">Times New Roman</mat-option>
+        <mat-option value="Courier New">Courier New</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Rozmiar czcionki</mat-label>
+      <mat-select
+        [(value)]="fontSize"
+        (selectionChange)="onFontSizeChange($event.value)"
+      >
+        <mat-option
+          *ngFor="
+            let size of [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40]
+          "
+          [value]="size"
+        >
+          {{ size }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!uniterm || uniterm.operationType !== 'PARALLEL'"
+      (click)="previewTransformation()"
+    >
+      Podgląd transformacji
+    </button>
+
+    <button mat-raised-button color="primary" (click)="addElement()">
+      Dodaj element
+    </button>
+  </div>
+
+  <div class="visualization-area">
+    <h3>Uniterm oryginalny</h3>
+    <div *ngIf="uniterm">
+      <app-uniterm-visualization
+        [uniterm]="uniterm"
+        [fontFamily]="fontFamily"
+        [fontSize]="fontSize"
+      >
       </app-uniterm-visualization>
-      
-      <div *ngIf="showTransformationPreview && transformedUniterm">
-        <h3>Podgląd transformacji</h3>
-        <app-uniterm-visualization 
-          [uniterm]="transformedUniterm" 
-          [fontFamily]="fontFamily" 
-          [fontSize]="fontSize">
-        </app-uniterm-visualization>
-      </div>
     </div>
-    
-    <div class="properties">
-      <mat-form-field class="full-width">
-        <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="getUniterm().name" placeholder="Uniterm name">
-      </mat-form-field>
-      
-      <mat-form-field class="full-width">
-        <mat-label>Description</mat-label>
-        <textarea matInput [(ngModel)]="getUniterm().description" placeholder="Description"></textarea>
-      </mat-form-field>
-      
-      <mat-form-field class="full-width">
-        <mat-label>Operation Type</mat-label>
-        <mat-select [(ngModel)]="getUniterm().operationType">
-          <mat-option value="PARALLEL">Równoległa</mat-option>
-          <mat-option value="SEQUENCE">Sekwencyjna</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    
-    <div class="elements-list" *ngIf="uniterm?.elements?.length">
-      <h3>Elementy</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Wyrażenie A</th>
-            <th>Wyrażenie B</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let element of getUniterm().elements">
-            <td>{{element.expressionA}}</td>
-            <td>{{element.expressionB}}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div *ngIf="showTransformationPreview && transformedUniterm">
+      <h3>Podgląd transformacji</h3>
+      <app-uniterm-visualization
+        [uniterm]="transformedUniterm"
+        [fontFamily]="fontFamily"
+        [fontSize]="fontSize"
+      >
+      </app-uniterm-visualization>
     </div>
   </div>
+
+  <div class="elements-list" *ngIf="uniterm?.elements?.length">
+    <h3>Elementy</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Wyrażenie A</th>
+          <th>Wyrażenie B</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let element of getUniterm().elements">
+          <td>{{ element.expressionA }}</td>
+          <td>{{ element.expressionB }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

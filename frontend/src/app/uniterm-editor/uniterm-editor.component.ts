@@ -76,7 +76,6 @@ export class UnitermEditorComponent implements OnChanges {
   
   previewTransformation(): void {
     if (!this.uniterm) return;
-    
     if (this.uniterm.operationType === OperationType.PARALLEL) {
       this.transformedUniterm = this.unitermService.previewTransformation(this.uniterm);
       this.showTransformationPreview = true;
@@ -88,8 +87,27 @@ export class UnitermEditorComponent implements OnChanges {
     dialogRef.afterClosed().subscribe(result => {
       if (result && this.uniterm) {
         this.uniterm.elements.push(result);
-        this.redrawUniterm();
+        this.unitermService.saveUniterm(this.uniterm).subscribe({
+          next: (updatedUniterm) => {
+            this.uniterm = updatedUniterm;
+            this.redrawUniterm();
+          },
+          error: (error) => console.error('Error saving uniterm with new element', error)
+        });
       }
     });
+  }
+
+  onOperationTypeChange(value: string): void {
+    if (this.uniterm) {
+      this.uniterm.operationType = value as OperationType;
+      this.redrawUniterm();
+      this.unitermService.saveUniterm(this.uniterm).subscribe({
+        next: (updatedUniterm) => {
+          this.uniterm = updatedUniterm;
+        },
+        error: (error) => console.error('Error updating operation type', error)
+      });
+    }
   }
 }
