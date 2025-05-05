@@ -1,0 +1,38 @@
+@startuml
+actor Użytkownik
+participant "UnitermListComponent" as ULC
+participant "UnitermEditorComponent" as UEC
+participant "UnitermVisualizationComponent" as UVC
+participant "UnitermService" as US
+participant "Backend" as BE
+participant "Baza Danych" as DB
+
+Użytkownik -> ULC: Wyświetl listę unitermów
+ULC -> US: getUniterms()
+US -> BE: HTTP GET /api/uniterms
+BE -> DB: Zapytanie o unitermy
+DB --> BE: Zwrócenie danych unitermów
+BE --> US: Zwrócenie listy unitermów
+US --> ULC: Wyświetlenie listy unitermów
+
+Użytkownik -> ULC: Wybór unitermu
+ULC -> UEC: Otwarcie edytora unitermu
+UEC -> UVC: Pokaż wizualizację unitermu
+UVC --> UEC: Wyświetlenie wizualizacji
+
+Użytkownik -> UEC: Dodanie elementu
+UEC -> US: saveUniterm(zaktualizowanyUniterm)
+US -> BE: HTTP PUT /api/uniterms/{id}
+BE -> DB: Aktualizacja unitermu
+DB --> BE: Potwierdzenie aktualizacji
+BE --> US: Zwrócenie zaktualizowanego unitermu
+US --> UEC: Aktualizacja UI
+UEC -> UVC: Aktualizacja wizualizacji
+UVC --> UEC: Wyświetlenie zaktualizowanej wizualizacji
+
+Użytkownik -> UEC: Podgląd transformacji
+UEC -> US: previewTransformation(uniterm)
+US --> UEC: Zwrócenie podglądu transformacji
+UEC -> UVC: Pokaż transformowaną wizualizację
+UVC --> UEC: Wyświetlenie transformowanego unitermu
+@enduml

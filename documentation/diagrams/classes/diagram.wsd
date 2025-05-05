@@ -1,0 +1,89 @@
+@startuml
+package "Backend" {
+  enum OperationType {
+    SEQUENCE
+    PARALLEL
+    UNION
+  }
+  
+  class Uniterm {
+    -id: Long
+    -name: String
+    -description: String
+    -operationType: OperationType
+    +addElement(element: UnitermElement): void
+    +removeElement(element: UnitermElement): void
+  }
+  
+  class UnitermElement {
+    -id: Long
+    -expressionA: String
+    -expressionB: String
+  }
+  
+  interface UnitermRepository {
+    +findAll(): List<Uniterm>
+    +findById(id: Long): Optional<Uniterm>
+    +save(uniterm: Uniterm): Uniterm
+    +existsById(id: Long): boolean
+    +deleteById(id: Long): void
+  }
+  
+  class UnitermService {
+    +findAll(): List<Uniterm>
+    +findById(id: Long): Optional<Uniterm>
+    +save(uniterm: Uniterm): Uniterm
+    +existsById(id: Long): boolean
+    +deleteById(id: Long): void
+  }
+  
+  class UnitermController {
+    +getAllUniterms(): List<Uniterm>
+    +getUnitermById(id: Long): ResponseEntity<Uniterm>
+    +createUniterm(uniterm: Uniterm): Uniterm
+    +updateUniterm(id: Long, uniterm: Uniterm): ResponseEntity<Uniterm>
+    +deleteUniterm(id: Long): ResponseEntity<Void>
+  }
+}
+
+package "Frontend" {
+  enum FrontendOperationType {
+    SEQUENCE
+    PARALLEL
+    UNION
+  }
+  
+  interface FrontendUnitermElement {
+    id?: number
+    expressionA: string
+    expressionB: string
+    expressionC?: string
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+  }
+  
+  interface FrontendUniterm {
+    id?: number
+    name: string
+    description?: string
+    elements: UnitermElement[]
+    operationType: OperationType
+    isTransformed?: boolean
+  }
+  
+  class UnitermService {
+    +getUniterms(): Observable<Uniterm[]>
+    +getUnitermById(id: number): Observable<Uniterm>
+    +saveUniterm(uniterm: Uniterm): Observable<Uniterm>
+    +deleteUniterm(id: number): Observable<void>
+    +previewTransformation(uniterm: Uniterm): Uniterm
+    +createTransformedUniterm(uniterm: Uniterm): Observable<Uniterm>
+  }
+}
+
+Uniterm "1" o-- "*" UnitermElement
+UnitermService --> UnitermRepository
+UnitermController --> UnitermService
+@enduml

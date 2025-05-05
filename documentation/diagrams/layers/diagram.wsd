@@ -1,0 +1,28 @@
+@startuml
+package "Aplikacja Uniterm" {
+  package "Frontend" {
+    [Warstwa Prezentacji] as FE_Presentation
+    [Warstwa Serwisowa] as FE_Service
+    [Klient HTTP] as FE_HTTP
+  }
+  
+  package "Backend" {
+    [Warstwa Kontrolerów] as BE_Controller
+    [Warstwa Serwisowa] as BE_Service
+    [Warstwa Repozytoriów] as BE_Repository
+    [Warstwa Domenowa] as BE_Domain
+  }
+  
+  package "Baza Danych" {
+    [PostgreSQL] as DB
+  }
+  
+  FE_Presentation --> FE_Service
+  FE_Service --> FE_HTTP
+  FE_HTTP --> BE_Controller
+  BE_Controller --> BE_Service
+  BE_Service --> BE_Repository
+  BE_Repository --> BE_Domain
+  BE_Repository --> DB
+}
+@enduml

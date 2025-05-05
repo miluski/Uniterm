@@ -1,0 +1,26 @@
+@startuml
+actor Uzytkownik
+
+package "Aplikacja webowa (frontend)" {
+    (Wyświetl zrównoleglenie poziome)
+    (Transformuj do sekwencjonowania pionowego)
+
+    Uzytkownik --> (Wyświetl zrównoleglenie poziome)
+    Uzytkownik --> (Transformuj do sekwencjonowania pionowego)
+}
+
+package "Backend (Spring Boot REST API)" {
+    (Dodaj uniterm)
+    (Dodaj wyrażenie do unitermu)
+    (Pobierz listę unitermów)
+
+    Uzytkownik --> (Dodaj uniterm)
+    Uzytkownik --> (Dodaj wyrażenie do unitermu)
+    Uzytkownik --> (Pobierz listę unitermów)
+
+    database "Baza danych" as DB
+    (Dodaj uniterm) --> DB
+    (Dodaj wyrażenie do unitermu) --> DB
+    (Pobierz listę unitermów) --> DB
+}
+@enduml
