@@ -1,23 +1,20 @@
 @startuml
-package "Frontend" {
+package "Frontend (Angular)" {
   [Komponent App] as AppComp
-  [Komponent Listy Unitermów] as ListComp
-  [Komponent Edytora Unitermów] as EditComp
+  [Komponent Kontrolera Wizualizacji] as VisControllerComp
   [Komponent Wizualizacji Unitermów] as VisComp
-  [Komponent Dialogu Dodawania Unitermu] as AddDialogComp
-  [Komponent Dialogu Dodawania Elementu] as ElemDialogComp
+  [Komponent Wizualizacji Scalania] as MergeVisComp
+  [Komponent Dialogu Dodawania] as AddDialogComp
   [Serwis Unitermów] as UnitermSvc
   
-  AppComp --> ListComp
-  ListComp --> EditComp
-  EditComp --> VisComp
-  ListComp --> AddDialogComp
-  EditComp --> ElemDialogComp
-  ListComp --> UnitermSvc
-  EditComp --> UnitermSvc
+  AppComp --> VisControllerComp
+  VisControllerComp --> VisComp
+  VisControllerComp --> MergeVisComp
+  VisControllerComp --> AddDialogComp
+  VisControllerComp --> UnitermSvc
 }
 
-package "Backend" {
+package "Backend (Spring Boot)" {
   [Kontroler Unitermów] as UnitermCtrl
   [Serwis Unitermów] as UnitermSvcBE
   [Repozytorium Unitermów] as UnitermRepo

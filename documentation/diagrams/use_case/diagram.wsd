@@ -2,25 +2,28 @@
 actor Uzytkownik
 
 package "Aplikacja webowa (frontend)" {
+    (Dodaj wyrażenie)
     (Wyświetl zrównoleglenie poziome)
-    (Transformuj do sekwencjonowania pionowego)
+    (Wyświetl sekwencjonowanie pionowe)
+    (Wybierz separator wyrażeń)
+    (Wizualizuj połączenie operacji)
 
+    Uzytkownik --> (Dodaj wyrażenie)
     Uzytkownik --> (Wyświetl zrównoleglenie poziome)
-    Uzytkownik --> (Transformuj do sekwencjonowania pionowego)
+    Uzytkownik --> (Wyświetl sekwencjonowanie pionowe)
+    Uzytkownik --> (Wybierz separator wyrażeń)
+    Uzytkownik --> (Wizualizuj połączenie operacji)
 }
 
 package "Backend (Spring Boot REST API)" {
-    (Dodaj uniterm)
-    (Dodaj wyrażenie do unitermu)
-    (Pobierz listę unitermów)
+    (Pobierz listę wyrażeń)
+    (Zapisz wyrażenie)
 
-    Uzytkownik --> (Dodaj uniterm)
-    Uzytkownik --> (Dodaj wyrażenie do unitermu)
-    Uzytkownik --> (Pobierz listę unitermów)
+    Uzytkownik --> (Pobierz listę wyrażeń)
+    Uzytkownik --> (Zapisz wyrażenie)
 
-    database "Baza danych" as DB
-    (Dodaj uniterm) --> DB
-    (Dodaj wyrażenie do unitermu) --> DB
-    (Pobierz listę unitermów) --> DB
-}
+    database "Baza danych PostgreSQL" as DB
+    (Zapisz wyrażenie) --> DB
+    (Pobierz listę wyrażeń) --> DB
+} 
 @enduml

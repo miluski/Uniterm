@@ -38,8 +38,8 @@ export class UnitermVisualizationControllerComponent implements OnInit {
   protected sequentialUniterms: Uniterm[] = [];
   protected showMergeView = false;
   protected separatorOptions = [
-    { value: ';', label: 'Semicolon (;)' },
-    { value: ',', label: 'Comma (,)' },
+    { value: ';', label: 'Średnik (;)' },
+    { value: ',', label: 'Przecinek (,)' },
   ];
   protected selectedSeparator: string = ';';
 

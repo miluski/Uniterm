@@ -1,20 +1,18 @@
 @startuml
 start
 :Użytkownik otwiera aplikację;
-:System wyświetla listę istniejących unitermów;
-:Użytkownik wybiera "Dodaj Uniterm";
-:System wyświetla formularz tworzenia unitermu;
-:Użytkownik wprowadza nazwę unitermu i wybiera typ operacji;
-:System tworzy nowy uniterm;
-:Użytkownik wybiera dodanie elementów do unitermu;
-:System wyświetla formularz tworzenia elementu;
-:Użytkownik dodaje wyrażenia do elementu;
-:System dodaje element do unitermu;
-:Użytkownik żąda wizualizacji unitermu;
-:System renderuje uniterm na canvasie;
-:Użytkownik wybiera transformację unitermu;
-:System pokazuje podgląd przekształconego unitermu;
-:Użytkownik potwierdza transformację;
-:System zapisuje przekształcony uniterm;
+:System wyświetla listę istniejących wyrażeń;
+:Użytkownik wybiera "Dodaj nowy";
+:System wyświetla dialog dodawania wyrażenia;
+:Użytkownik wprowadza wyrażenie i wybiera separator;
+:System zapisuje nowe wyrażenie;
+:Użytkownik wybiera wyrażenia do zrównoleglenia poziomego;
+:System renderuje wizualizację zrównoleglenia;
+:Użytkownik wybiera wyrażenia do sekwencjonowania pionowego;
+:System renderuje wizualizację sekwencjonowania;
+:Użytkownik klika przycisk "Wizualizacja";
+:System wyświetla opcje łączenia operacji;
+:Użytkownik wybiera "Zamiana za 1" lub "Zamiana za 2";
+:System pokazuje wizualizację połączonej operacji;
 stop
 @enduml

@@ -1,21 +1,12 @@
 @startuml
 !define table(x) class x << (T,#FFAAAA) >>
 !define primary_key(x) <b>x</b>
-!define foreign_key(x) <u>x</u>
 
 table(uniterms) {
   primary_key(id): BIGINT
   name: VARCHAR NOT NULL
+  expression: VARCHAR NOT NULL
   description: VARCHAR
-  operation_type: VARCHAR NOT NULL
 }
 
-table(uniterm_elements) {
-  primary_key(id): BIGINT
-  expression_a: VARCHAR NOT NULL
-  expression_b: VARCHAR NOT NULL
-  foreign_key(uniterm_id): BIGINT
-}
-
-uniterms ||--o{ uniterm_elements
 @enduml

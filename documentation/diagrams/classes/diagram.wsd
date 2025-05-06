@@ -1,24 +1,10 @@
 @startuml
 package "Backend" {
-  enum OperationType {
-    SEQUENCE
-    PARALLEL
-    UNION
-  }
-  
   class Uniterm {
     -id: Long
     -name: String
+    -expression: String
     -description: String
-    -operationType: OperationType
-    +addElement(element: UnitermElement): void
-    +removeElement(element: UnitermElement): void
-  }
-  
-  class UnitermElement {
-    -id: Long
-    -expressionA: String
-    -expressionB: String
   }
   
   interface UnitermRepository {
@@ -47,30 +33,18 @@ package "Backend" {
 }
 
 package "Frontend" {
-  enum FrontendOperationType {
+  enum OperationType {
     SEQUENCE
     PARALLEL
-    UNION
   }
   
-  interface FrontendUnitermElement {
-    id?: number
-    expressionA: string
-    expressionB: string
-    expressionC?: string
-    x?: number
-    y?: number
-    width?: number
-    height?: number
-  }
-  
-  interface FrontendUniterm {
+  interface Uniterm {
     id?: number
     name: string
-    description?: string
-    elements: UnitermElement[]
-    operationType: OperationType
+    expression: string
+    separator?: string
     isTransformed?: boolean
+    operationType?: OperationType
   }
   
   class UnitermService {
@@ -78,12 +52,25 @@ package "Frontend" {
     +getUnitermById(id: number): Observable<Uniterm>
     +saveUniterm(uniterm: Uniterm): Observable<Uniterm>
     +deleteUniterm(id: number): Observable<void>
-    +previewTransformation(uniterm: Uniterm): Uniterm
-    +createTransformedUniterm(uniterm: Uniterm): Observable<Uniterm>
+  }
+  
+  class UnitermVisualizationComponent {
+    +uniterms: Uniterm[]
+    +operationType: 'PARALLEL' | 'SEQUENCE'
+    +separator: string
+    +drawParallelOperation()
+    +drawSequentialOperation()
+  }
+  
+  class UnitermMergeVisualizationComponent {
+    +parallelUniterms: Uniterm[]
+    +sequentialUniterms: Uniterm[]
+    +separator: string
+    +drawMergedVisualization(index: number)
+    +selectReplacement(index: number)
   }
 }
 
-Uniterm "1" o-- "*" UnitermElement
 UnitermService --> UnitermRepository
 UnitermController --> UnitermService
 @enduml
