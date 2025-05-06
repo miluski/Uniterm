@@ -1,0 +1,88 @@
+<div class="visualization-controller">
+  <div class="uniterm-controls">
+    <button mat-raised-button color="primary" (click)="openAddDialog()">
+      Dodaj nowy
+    </button>
+    
+    <div class="uniterm-list">
+      <h3>Dostępne wyrażenia</h3>
+      <ul>
+        <li *ngFor="let uniterm of allUniterms">
+          {{ uniterm.expression }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="separator-selection">
+    <h3>Separator</h3>
+    <mat-form-field>
+      <mat-label>Separator</mat-label>
+      <mat-select [(ngModel)]="selectedSeparator">
+        <mat-option *ngFor="let option of separatorOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  
+  <div class="parallel-selector">
+    <h3>Wybierz unitermy dla zrównoleglenia poziomego (max 2)</h3>
+    <mat-form-field>
+      <mat-label>Wyrażenia zrównoleglenia</mat-label>
+      <mat-select [(ngModel)]="parallelSelection" multiple (selectionChange)="updateParallelSelection()">
+        <mat-option *ngFor="let uniterm of allUniterms" [value]="uniterm.id">
+          {{ uniterm.expression }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  
+  <div class="sequential-selector">
+    <h3>Wybierz unitermy dla sekwencjonowania pionowego (max 2)</h3>
+    <mat-form-field>
+      <mat-label>Wyrażenia sekwencjonowania</mat-label>
+      <mat-select [(ngModel)]="sequentialSelection" multiple (selectionChange)="updateSequentialSelection()">
+        <mat-option *ngFor="let uniterm of allUniterms" [value]="uniterm.id">
+          {{ uniterm.expression }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  
+  <div class="visualizations">
+    <div class="parallel-visualization">
+      <h3>Sekwencjonowanie pionowe</h3>
+      <app-uniterm-visualization 
+        [uniterms]="parallelUniterms" 
+        [operationType]="'PARALLEL'"
+        [separator]="selectedSeparator">
+      </app-uniterm-visualization>
+    </div>
+    
+    <div class="sequential-visualization">
+      <h3>Zrównoleglenie poziome</h3>
+      <app-uniterm-visualization 
+        [uniterms]="sequentialUniterms" 
+        [operationType]="'SEQUENCE'"
+        [separator]="selectedSeparator">
+      </app-uniterm-visualization>
+    </div>
+  </div>
+  
+  <div class="merge-controls">
+    <button mat-raised-button color="accent" (click)="toggleMergeView()" [disabled]="parallelUniterms.length === 0 || sequentialUniterms.length === 0">
+      Wizualizacja
+    </button>
+  </div>
+  
+  <div class="merge-visualization" *ngIf="showMergeView">
+    <h3>Wizualizacja</h3>
+    <app-uniterm-merge-visualization
+      [parallelUniterms]="parallelUniterms"
+      [sequentialUniterms]="sequentialUniterms"
+      [separator]="selectedSeparator"
+      (mergeSelected)="handleMergeSelection($event)">
+    </app-uniterm-merge-visualization>
+  </div>
+</div>

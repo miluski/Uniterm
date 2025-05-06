@@ -1,17 +1,3 @@
-.editor-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-}
-
-.toolbar {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 .visualization-area {
   border: 1px solid #ddd;
   padding: 15px;
@@ -19,30 +5,8 @@
   border-radius: 5px;
 }
 
-.properties {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .full-width {
   width: 100%;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-table th, table td {
-  text-align: left;
-  padding: 8px;
-  border: 1px solid #ddd;
-}
-
-table th {
-  background-color: #f2f2f2;
 }
 
 h3 {
@@ -50,6 +14,65 @@ h3 {
   color: #333;
 }
 
-.elements-list {
-  margin-top: 20px;
+.visualization-controller {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.uniterm-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.uniterm-list {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.uniterm-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.uniterm-list li {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.operation-selectors {
+  display: flex;
+  gap: 20px;
+}
+
+.parallel-selector, .sequential-selector {
+  flex: 1;
+}
+
+.visualizations {
+  display: flex;
+  gap: 20px;
+}
+
+.parallel-visualization, .sequential-visualization {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.separator-selection {
+  margin-bottom: 20px;
+}
+
+.merge-controls {
+  margin: 20px 0;
+}
+
+mat-form-field {
+  width: 100%;
 }

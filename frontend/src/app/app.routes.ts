@@ -1,10 +1,8 @@
 import { Routes } from '@angular/router';
-import { UnitermListComponent } from './uniterm-list/uniterm-list.component';
-import { UnitermEditorComponent } from './uniterm-editor/uniterm-editor.component';
+import { UnitermVisualizationControllerComponent } from './uniterm-visualisation-controller/uniterm-visualisation-controller.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'uniterms', pathMatch: 'full' },
-  { path: 'uniterms', component: UnitermListComponent },
-  { path: 'uniterms/:id', component: UnitermEditorComponent },
-  { path: '**', redirectTo: 'uniterms' }
+  { path: '', redirectTo: 'visualize', pathMatch: 'full' },
+  { path: 'visualize', component: UnitermVisualizationControllerComponent },
+  { path: '**', redirectTo: 'visualize' }
 ];
