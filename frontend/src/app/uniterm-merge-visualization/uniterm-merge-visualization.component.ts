@@ -42,24 +42,30 @@ import { MatCardModule } from '@angular/material/card';
         >
           Zamiana za 2
         </button>
-      </div>
 
-      <div class="previews" *ngIf="showPreview">
-        <div class="preview-row">
-          <div class="preview-container" *ngIf="selectedReplacementIndex === 0">
-            <h3>Wynik</h3>
-            <h4>Zamiana za 1:</h4>
-            <canvas #mergedCanvas1 width="500" height="200"></canvas>
+        <div class="previews" *ngIf="showPreview">
+          <div class="preview-row">
+            <div
+              class="preview-container"
+              *ngIf="selectedReplacementIndex === 0"
+            >
+              <h3>Wynik</h3>
+              <h4>Zamiana za 1:</h4>
+              <canvas #mergedCanvas1 width="500" height="200"></canvas>
+            </div>
+
+            <div
+              class="preview-container"
+              *ngIf="selectedReplacementIndex === 1"
+            >
+              <h3>Wynik</h3>
+              <h4>Zamiana za 2:</h4>
+              <canvas #mergedCanvas2 width="500" height="200"></canvas>
+            </div>
           </div>
 
-          <div class="preview-container" *ngIf="selectedReplacementIndex === 1">
-            <h3>Wynik</h3>
-            <h4>Zamiana za 2:</h4>
-            <canvas #mergedCanvas2 width="500" height="200"></canvas>
-          </div>
+          <button mat-button color="warn" (click)="resetMerge()">Reset</button>
         </div>
-
-        <button mat-button color="warn" (click)="resetMerge()">Reset</button>
       </div>
     </div>
   `,
@@ -187,7 +193,7 @@ export class UnitermMergeVisualizationComponent implements OnInit, OnChanges {
         this.mergedCtx2 = this.mergedCanvas2Ref.nativeElement.getContext('2d')!;
         this.drawMergedVisualization(1);
       }
-    });
+    }, 100);
     const parallelText = this.parallelUniterms
       .map((u) => u.expression)
       .join(` ${this.separator} `);
