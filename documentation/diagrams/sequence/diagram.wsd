@@ -1,8 +1,8 @@
 @startuml
 actor Użytkownik
-participant "UnitermVisualizationControllerComponent" as UVCC
+participant "UnitermVisualisationControllerComponent" as UVCC
 participant "AddUnitermDialogComponent" as AUDC
-participant "UnitermVisualizationComponent" as UVC
+participant "UnitermVisualisationComponent" as UVC
 participant "UnitermMergeVisualizationComponent" as UMVC
 participant "UnitermService" as US
 participant "Backend" as BE
@@ -15,10 +15,11 @@ BE -> DB: Zapytanie o unitermy
 DB --> BE: Zwrócenie wyrażeń
 BE --> US: Zwrócenie listy wyrażeń
 US --> UVCC: Aktualizacja listy wyrażeń
-
-Użytkownik -> UVCC: Kliknięcie "Dodaj nowy"
+ 
+Użytkownik -> UVCC: Kliknięcie "Dodaj nowe wyrażenie"
 UVCC -> AUDC: Otwarcie dialogu
-Użytkownik -> AUDC: Wprowadzenie wyrażenia
+Użytkownik -> AUDC: Wprowadzenie wyrażenia (parallelPart1, parallelPart2, separator)
+Użytkownik -> AUDC: Wprowadzenie sekwencyjnego wyrażenia (sequentialPart1, sequentialPart2, separator)
 AUDC -> US: saveUniterm(noweWyrażenie)
 US -> BE: HTTP POST /api/uniterms
 BE -> DB: Zapisanie wyrażenia
@@ -26,21 +27,18 @@ DB --> BE: Potwierdzenie zapisu
 BE --> US: Zwrócenie zapisanego wyrażenia
 US --> UVCC: Odświeżenie listy wyrażeń
 
-Użytkownik -> UVCC: Wybór wyrażeń do zrównoleglenia
-UVCC -> UVC: Aktualizacja [uniterms] dla zrównoleglenia
-UVC --> UVCC: Wyświetlenie zrównoleglenia
+Użytkownik -> UVCC: Wybór wyrażenia z listy
+UVCC -> UVCC: Przetworzenie na parallelUniterms i sequentialUniterms
+UVCC -> UVC: Przekazanie [uniterms] dla zrównoleglenia
+UVC -> UVC: drawParallelOperation() na canvas
+UVC --> UVCC: Wyświetlenie wizualizacji zrównoleglenia
 
-Użytkownik -> UVCC: Wybór wyrażeń do sekwencjonowania
-UVCC -> UVC: Aktualizacja [uniterms] dla sekwencjonowania
-UVC --> UVCC: Wyświetlenie sekwencjonowania
+UVCC -> UVC: Przekazanie [uniterms] dla sekwencjonowania
+UVC -> UVC: drawSequentialOperation() na canvas
+UVC --> UVCC: Wyświetlenie wizualizacji sekwencjonowania
 
-Użytkownik -> UVCC: Zmiana separatora
-UVCC -> UVC: Aktualizacja [separator]
-UVC --> UVCC: Odświeżenie wizualizacji
-
-Użytkownik -> UVCC: Kliknięcie "Wizualizacja"
-UVCC -> UMVC: Przekazanie wyrażeń równoległych i sekwencyjnych
-Użytkownik -> UMVC: Wybór "Zamiana za 1/2"
-UMVC -> UMVC: Renderowanie połączonej wizualizacji
-UMVC --> UVCC: Wyświetlenie wizualizacji
-@enduml
+UVCC -> UMVC: Przekazanie parallelUniterms, sequentialUniterms i separatorów
+UMVC -> UMVC: drawVisualizations() (oba warianty transformacji)
+UMVC --> UVCC: Automatyczne wyświetlenie transformacji
+UMVC -> UVCC: emitSelection() z informacją o transformacji
+@enduml 

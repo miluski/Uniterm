@@ -1,0 +1,12 @@
+<div class="visualization-container" [ngClass]="operationType.toLowerCase()">
+  <ng-container *ngIf="uniterms && uniterms.length > 0">
+    <div class="expression-box" *ngFor="let uniterm of uniterms; let i = index">
+      <div class="expression" *ngIf="uniterm.expression">{{ uniterm.expression }}</div>
+      <div class="separator" *ngIf="i < uniterms.length - 1 && uniterms[i+1]?.expression">{{ separator }}</div>
+    </div>
+  </ng-container>
+  
+  <div *ngIf="!uniterms || uniterms.length === 0" class="empty-state">
+    Brak wyrażeń do wyświetlenia
+  </div>
+</div> 

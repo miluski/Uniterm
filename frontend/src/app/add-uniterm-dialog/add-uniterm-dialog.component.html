@@ -1,13 +1,68 @@
-<h2 mat-dialog-title>{{ 'Dodaj' }} Wyrażenie</h2>
+<h2 mat-dialog-title>{{ isEditMode ? 'Edytuj' : 'Dodaj' }} Wyrażenie</h2>
 
 <mat-dialog-content>
-  <form [formGroup]="unitermForm">
+  <form [formGroup]="unitermForm" class="uniterm-form">
     <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Wyrażenie</mat-label>
-      <input matInput formControlName="firstExpression" placeholder="Wprowadź wyrażenie">
-      <mat-error *ngIf="unitermForm.get('firstExpression')?.hasError('required')">
-       Wyrażenie jest wymagane
+      <mat-label>Nazwa (opcjonalnie)</mat-label>
+      <input matInput formControlName="name" placeholder="Opcjonalna nazwa dla wyrażenia">
+    </mat-form-field>
+
+    <div class="section-header">
+      <h3>Zrównoleglenie poziome</h3>
+    </div>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Pierwsza część wyrażenia</mat-label>
+      <input matInput formControlName="parallelPart1" placeholder="Pierwsza część wyrażenia">
+      <mat-error *ngIf="unitermForm.get('parallelPart1')?.hasError('required')">
+        Wymagane pole
       </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Druga część wyrażenia</mat-label>
+      <input matInput formControlName="parallelPart2" placeholder="Druga część wyrażenia">
+      <mat-error *ngIf="unitermForm.get('parallelPart2')?.hasError('required')">
+        Wymagane pole
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Separator dla wyrażenia poziomego</mat-label>
+      <mat-select formControlName="parallelSeparator">
+        <mat-option *ngFor="let option of separatorOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="section-header">
+      <h3>Sekwencjonowanie pionowe</h3>
+    </div>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Pierwsza część wyrażenia</mat-label>
+      <input matInput formControlName="sequentialPart1" placeholder="Pierwsza część wyrażenia">
+      <mat-error *ngIf="unitermForm.get('sequentialPart1')?.hasError('required')">
+        Wymagane pole
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Druga część wyrażenia</mat-label>
+      <input matInput formControlName="sequentialPart2" placeholder="Druga część wyrażenia">
+      <mat-error *ngIf="unitermForm.get('sequentialPart2')?.hasError('required')">
+        Wymagane pole
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Separator dla wyrażenia pionowego</mat-label>
+      <mat-select formControlName="sequentialSeparator">
+        <mat-option *ngFor="let option of separatorOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
   </form>
 </mat-dialog-content>

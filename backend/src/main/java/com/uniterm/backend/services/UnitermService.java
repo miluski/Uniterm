@@ -30,8 +30,4 @@ public class UnitermService {
     public boolean existsById(Long id) {
         return unitermRepository.existsById(id);
     }
-
-    public void deleteById(Long id) {
-        unitermRepository.deleteById(id);
-    }
 }

@@ -1,10 +1,11 @@
 @startuml
 package "Aplikacja Uniterm" {
   package "Frontend (Angular)" {
-    [Komponenty Wizualizacji] as FE_Visualization
-    [Komponenty Dialogowe] as FE_Dialog
+    [Standalone Komponenty Wizualizacji] as FE_Visualization
+    [Standalone Komponenty Dialogowe] as FE_Dialog
     [Serwis HTTP] as FE_Service
     [Modele Danych] as FE_Models
+    [Angular Material] as FE_Material
   }
   
   package "Backend (Spring Boot)" {
@@ -12,20 +13,24 @@ package "Aplikacja Uniterm" {
     [Serwis] as BE_Service
     [Repozytorium] as BE_Repository
     [Model Danych] as BE_Domain
+    [Konfiguracja CORS] as BE_Config
   }
   
   package "Baza Danych" {
     [PostgreSQL] as DB
   }
-  
+   
   FE_Visualization --> FE_Dialog
   FE_Visualization --> FE_Service
+  FE_Visualization --> FE_Material
   FE_Dialog --> FE_Service
+  FE_Dialog --> FE_Material
   FE_Service --> FE_Models
   FE_Service --> BE_Controller
   BE_Controller --> BE_Service
+  BE_Controller --> BE_Config
   BE_Service --> BE_Repository
   BE_Repository --> BE_Domain
   BE_Repository --> DB
 }
-@enduml
+@enduml 

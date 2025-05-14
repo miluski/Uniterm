@@ -1,29 +1,49 @@
 @startuml
 package "Frontend (Angular)" {
-  [Komponent App] as AppComp
-  [Komponent Kontrolera Wizualizacji] as VisControllerComp
-  [Komponent Wizualizacji Unitermów] as VisComp
-  [Komponent Wizualizacji Scalania] as MergeVisComp
-  [Komponent Dialogu Dodawania] as AddDialogComp
-  [Serwis Unitermów] as UnitermSvc
+  [AppComponent (standalone)] as AppComp
+  [UnitermVisualisationControllerComponent (standalone)] as VisControllerComp
+  [UnitermVisualisationComponent (standalone)] as VisComp
+  [UnitermMergeVisualizationComponent (standalone)] as MergeVisComp
+  [AddUnitermDialogComponent (standalone)] as AddDialogComp
+  [UnitermService] as UnitermSvc
+  [Models (Uniterm, OperationType, etc.)] as Models
+  [MatDialog] as MatDialog
+  [MatFormField, MatSelect, etc.] as MatComponents
+  [HttpClient] as HttpClient
+  [Router] as Router
   
+  AppComp --> Router
   AppComp --> VisControllerComp
   VisControllerComp --> VisComp
   VisControllerComp --> MergeVisComp
-  VisControllerComp --> AddDialogComp
+  VisControllerComp --> AddDialogComp : "via MatDialog"
   VisControllerComp --> UnitermSvc
+  VisControllerComp --> HttpClient : "fallback direct HTTP"
+  VisControllerComp --> MatComponents
+  AddDialogComp --> MatComponents
+  UnitermSvc --> HttpClient
+  UnitermSvc --> Models
+  VisControllerComp --> MatDialog
 }
-
+ 
 package "Backend (Spring Boot)" {
-  [Kontroler Unitermów] as UnitermCtrl
-  [Serwis Unitermów] as UnitermSvcBE
-  [Repozytorium Unitermów] as UnitermRepo
-  [Konfiguracja Bezpieczeństwa] as SecConfig
+  [UnitermController] as UnitermCtrl
+  [UnitermService] as UnitermSvcBE
+  [UnitermRepository] as UnitermRepo
+  [SecurityConfig] as SecConfig
+  [Uniterm Entity] as UnitermEntity
   
   UnitermCtrl --> UnitermSvcBE
   UnitermSvcBE --> UnitermRepo
-  UnitermCtrl --> SecConfig
+  UnitermRepo --> UnitermEntity
+  UnitermCtrl --> SecConfig : "uses CORS config"
 }
 
-UnitermSvc --> UnitermCtrl : HTTP
+database "PostgreSQL" {
+  [uniterms table] as DB
+}
+
+UnitermSvc --> UnitermCtrl : "HTTP REST API"
+UnitermRepo --> DB : "JPA"
+
 @enduml

@@ -6,7 +6,9 @@ table(uniterms) {
   primary_key(id): BIGINT
   name: VARCHAR NOT NULL
   expression: VARCHAR NOT NULL
-  description: VARCHAR
+  second_expression: VARCHAR NOT NULL
+  separator: VARCHAR
+  sequential_separator: VARCHAR
 }
 
 @enduml

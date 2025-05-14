@@ -76,3 +76,23 @@ h3 {
 mat-form-field {
   width: 100%;
 }
+
+.uniterm-list {
+  margin-bottom: 20px;
+}
+
+.select-uniterm {
+  min-width: 250px;
+  margin-right: 16px;
+}
+
+button {
+  margin: 0 8px;
+}
+
+.controls-wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}

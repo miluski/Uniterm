@@ -1,115 +1,61 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, of } from "rxjs";
-import { Uniterm, OperationType, CompositeOperation, TransformationPreview } from "../models/uniterm.model";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, tap } from 'rxjs';
+import { Uniterm } from '../models/uniterm.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UnitermService {
   private apiUrl = 'http://localhost:8080/api/uniterms';
-  private operations: CompositeOperation[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getUniterms(): Observable<Uniterm[]> {
-    return this.http.get<Uniterm[]>(this.apiUrl);
+    console.log('Fetching uniterms from:', this.apiUrl);
+    return this.http.get<Uniterm[]>(this.apiUrl).pipe(
+      tap((data) => console.log('Fetched uniterms:', data)),
+      catchError((error) => {
+        console.error('Error fetching uniterms:', error);
+        throw error;
+      })
+    );
   }
 
   getUnitermById(id: number): Observable<Uniterm> {
-    return this.http.get<Uniterm>(`${this.apiUrl}/${id}`);
+    return this.http.get<Uniterm>(`${this.apiUrl}/${id}`).pipe(
+      tap((data) => console.log(`Fetched uniterm id=${id}:`, data)),
+      catchError((error) => {
+        console.error(`Error fetching uniterm id=${id}:`, error);
+        throw error;
+      })
+    );
   }
 
   saveUniterm(uniterm: Uniterm): Observable<Uniterm> {
+    console.log('Saving uniterm:', uniterm);
     if (uniterm.id) {
-      return this.http.put<Uniterm>(`${this.apiUrl}/${uniterm.id}`, uniterm);
+      return this.http
+        .put<Uniterm>(`${this.apiUrl}/${uniterm.id}`, uniterm)
+        .pipe(
+          tap((data) => console.log('Updated uniterm:', data)),
+          catchError((error) => {
+            console.error('Error updating uniterm:', error);
+            throw error;
+          })
+        );
     } else {
-      return this.http.post<Uniterm>(this.apiUrl, uniterm);
+      return this.http.post<Uniterm>(this.apiUrl, uniterm).pipe(
+        tap((data) => console.log('Created uniterm:', data)),
+        catchError((error) => {
+          console.error('Error creating uniterm:', error);
+          throw error;
+        })
+      );
     }
   }
 
-  deleteUniterm(id: number): Observable<void> {
+  deleteUnitermById(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  previewTransformation(uniterm: Uniterm): Uniterm {
-    if (uniterm.operationType === OperationType.PARALLEL) {
-      return {
-        ...uniterm,
-        operationType: OperationType.SEQUENCE,
-        isTransformed: true
-      };
-    }
-    return uniterm;
-  }
-  
-  previewReplaceFirstUniterm(uniterm: Uniterm): Uniterm {
-    return this.previewTransformation(uniterm);
-  }
-  
-  previewReplaceSecondUniterm(uniterm: Uniterm): Uniterm {
-    return this.previewTransformation(uniterm);
-  }
-
-  createTransformedUniterm(uniterm: Uniterm, replaceFirstUniterm: boolean): Observable<Uniterm> {
-    const transformed = this.previewTransformation(uniterm);
-    return this.saveUniterm(transformed);
-  }
-
-  getOperations(): CompositeOperation[] {
-    return [...this.operations]; 
-  }
-  
-  createOperation(firstUnitermId: number, secondUnitermId: number, operationType: OperationType): CompositeOperation {
-    const operation: CompositeOperation = {
-      id: `op-${Date.now()}`, 
-      firstUnitermId,
-      secondUnitermId,
-      operationType,
-      name: `Operation ${this.operations.length + 1}`
-    };
-    
-    this.operations.push(operation);
-    return operation;
-  }
-  
-  createTransformationPreview(
-    operationId: string,
-    replacedUnitermIndex: 0 | 1,
-    replacementUnitermIds: number[]
-  ): TransformationPreview | null {
-    const originalOperation = this.operations.find(op => op.id === operationId);
-    
-    if (!originalOperation || replacementUnitermIds.length < 2) {
-      return null;
-    }
-    
-    const replacementOperation: CompositeOperation = {
-      id: `replacement-${Date.now()}`,
-      firstUnitermId: replacementUnitermIds[0],
-      secondUnitermId: replacementUnitermIds[1],
-      operationType: OperationType.SEQUENCE
-    };
-    
-    return {
-      originalOperation,
-      replacedUnitermIndex,
-      replacementOperation
-    };
-  }
-  
-  applyTransformation(preview: TransformationPreview): void {
-    const transformedOperation: CompositeOperation = {
-      id: `transformed-${Date.now()}`,
-      firstUnitermId: preview.replacedUnitermIndex === 0 
-        ? preview.replacementOperation.firstUnitermId 
-        : preview.originalOperation.firstUnitermId,
-      secondUnitermId: preview.replacedUnitermIndex === 1 
-        ? preview.replacementOperation.secondUnitermId 
-        : preview.originalOperation.secondUnitermId,
-      operationType: OperationType.PARALLEL,
-      name: `Transformed ${preview.originalOperation.name || 'operation'}`
-    };
-    this.operations.push(transformedOperation);
   }
 }

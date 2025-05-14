@@ -1,13 +1,15 @@
 export enum OperationType {
   PARALLEL = 'PARALLEL',
-  SEQUENCE = 'SEQUENCE'
+  SEQUENCE = 'SEQUENCE',
 }
 
 export interface Uniterm {
   id?: number;
-  name: string;  
+  name: string;
   expression: string;
-  operationType?: OperationType;
+  secondExpression?: string;
+  separator?: string;
+  sequentialSeparator?: string;
   isTransformed?: boolean;
 }
 
@@ -27,11 +29,18 @@ export interface CompositeOperation {
 
 export interface TransformationPreview {
   originalOperation: CompositeOperation;
-  replacedUnitermIndex: 0 | 1; 
+  replacedUnitermIndex: 0 | 1;
   replacementOperation: CompositeOperation;
 }
 
 export interface OperationSelection {
   selectedUniterms: number[];
   operationType: OperationType;
+}
+
+export interface UnitermPair {
+  id?: number;
+  parallelExpressions: string[];
+  sequentialExpressions: string[];
+  separator: string;
 }

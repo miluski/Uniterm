@@ -31,22 +31,4 @@ public class UnitermController {
     public Uniterm createUniterm(@RequestBody Uniterm uniterm) {
         return unitermService.save(uniterm);
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Uniterm> updateUniterm(@PathVariable Long id, @RequestBody Uniterm uniterm) {
-        if (!unitermService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        uniterm.setId(id);
-        return ResponseEntity.ok(unitermService.save(uniterm));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUniterm(@PathVariable Long id) {
-        if (!unitermService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        unitermService.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
 }

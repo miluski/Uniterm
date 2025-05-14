@@ -2,17 +2,28 @@
 start
 :Użytkownik otwiera aplikację;
 :System wyświetla listę istniejących wyrażeń;
-:Użytkownik wybiera "Dodaj nowy";
-:System wyświetla dialog dodawania wyrażenia;
-:Użytkownik wprowadza wyrażenie i wybiera separator;
-:System zapisuje nowe wyrażenie;
-:Użytkownik wybiera wyrażenia do zrównoleglenia poziomego;
-:System renderuje wizualizację zrównoleglenia;
-:Użytkownik wybiera wyrażenia do sekwencjonowania pionowego;
-:System renderuje wizualizację sekwencjonowania;
-:Użytkownik klika przycisk "Wizualizacja";
-:System wyświetla opcje łączenia operacji;
-:Użytkownik wybiera "Zamiana za 1" lub "Zamiana za 2";
-:System pokazuje wizualizację połączonej operacji;
+
+if (Użytkownik chce dodać nowe wyrażenie?) then (tak)
+  :Użytkownik wybiera "Dodaj nowe wyrażenie";
+  :System wyświetla dialog dodawania wyrażenia;
+  :Użytkownik wprowadza wyrażenie poziome z dwóch części;
+  :Użytkownik wybiera separator dla wyrażenia poziomego;
+  :Użytkownik wprowadza wyrażenie pionowe z dwóch części;
+  :Użytkownik wybiera separator dla wyrażenia pionowego;
+  :System zapisuje nowe wyrażenie;
+else (nie)
+endif
+ 
+:Użytkownik wybiera wyrażenie z listy;
+:System analizuje wyrażenia i identyfikuje części składowe;
+fork
+  :System renderuje wizualizację zrównoleglenia poziomego na canvas;
+fork again
+  :System renderuje wizualizację sekwencjonowania pionowego na canvas;
+fork again
+  :System automatycznie renderuje dwie opcje transformacji;
+  :System pokazuje "Zamiana za 1" - sekwencja zastępująca pierwszy element zrównoleglenia;
+  :System pokazuje "Zamiana za 2" - sekwencja zastępująca drugi element zrównoleglenia;
+end fork
 stop
 @enduml

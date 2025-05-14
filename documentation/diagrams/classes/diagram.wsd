@@ -4,7 +4,10 @@ package "Backend" {
     -id: Long
     -name: String
     -expression: String
-    -description: String
+    -secondExpression: String
+    -separator: String
+    -sequentialSeparator: String
+    +ensureNameIsSet(): void
   }
   
   interface UnitermRepository {
@@ -12,23 +15,24 @@ package "Backend" {
     +findById(id: Long): Optional<Uniterm>
     +save(uniterm: Uniterm): Uniterm
     +existsById(id: Long): boolean
-    +deleteById(id: Long): void
-  }
+  } 
   
   class UnitermService {
     +findAll(): List<Uniterm>
     +findById(id: Long): Optional<Uniterm>
     +save(uniterm: Uniterm): Uniterm
     +existsById(id: Long): boolean
-    +deleteById(id: Long): void
   }
   
   class UnitermController {
     +getAllUniterms(): List<Uniterm>
     +getUnitermById(id: Long): ResponseEntity<Uniterm>
     +createUniterm(uniterm: Uniterm): Uniterm
-    +updateUniterm(id: Long, uniterm: Uniterm): ResponseEntity<Uniterm>
-    +deleteUniterm(id: Long): ResponseEntity<Void>
+  }
+  
+  class SecurityConfig {
+    +securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain
+    +corsConfigurationSource(): CorsConfigurationSource
   }
 }
 
@@ -40,37 +44,109 @@ package "Frontend" {
   
   interface Uniterm {
     id?: number
-    name: string
+    name: string  
     expression: string
+    secondExpression?: string
     separator?: string
+    sequentialSeparator?: string
     isTransformed?: boolean
-    operationType?: OperationType
+  }
+  
+  interface UnitermElement {
+    id?: number
+    expressionA: string
+    expressionB: string
+  }
+  
+  interface CompositeOperation {
+    id: string
+    firstUnitermId: number
+    secondUnitermId: number
+    operationType: OperationType
+    name?: string
+  }
+  
+  interface TransformationPreview {
+    originalOperation: CompositeOperation
+    replacedUnitermIndex: 0 | 1
+    replacementOperation: CompositeOperation
+  }
+  
+  interface OperationSelection {
+    selectedUniterms: number[]
+    operationType: OperationType
+  }
+  
+  interface UnitermPair {
+    id?: number
+    parallelExpressions: string[]
+    sequentialExpressions: string[]
+    separator: string
   }
   
   class UnitermService {
+    -apiUrl: string
     +getUniterms(): Observable<Uniterm[]>
     +getUnitermById(id: number): Observable<Uniterm>
     +saveUniterm(uniterm: Uniterm): Observable<Uniterm>
-    +deleteUniterm(id: number): Observable<void>
+    +deleteUnitermById(id: number): Observable<void>
   }
   
-  class UnitermVisualizationComponent {
+  class UnitermVisualisationComponent {
     +uniterms: Uniterm[]
-    +operationType: 'PARALLEL' | 'SEQUENCE'
+    +operationType: string
     +separator: string
-    +drawParallelOperation()
-    +drawSequentialOperation()
+    +canvasWidth: number
+    +ngAfterViewInit(): void
+    +ngOnChanges(): void
+    -drawVisualization(): void
+    -drawParallelOperation(): void
+    -drawSequentialOperation(): void
   }
   
   class UnitermMergeVisualizationComponent {
     +parallelUniterms: Uniterm[]
     +sequentialUniterms: Uniterm[]
     +separator: string
-    +drawMergedVisualization(index: number)
-    +selectReplacement(index: number)
+    +mergeSelected: EventEmitter<{index: number; result: string}>
+    +ngAfterViewInit(): void
+    +ngOnChanges(): void
+    -drawVisualizations(): void
+    -drawOption1(): void
+    -drawOption2(): void
+    -emitSelection(): void
+  }
+  
+  class UnitermVisualisationControllerComponent {
+    +allUniterms: Uniterm[]
+    +selectedUnitermId?: number
+    +selectedUniterm?: Uniterm
+    +parallelUniterms: Uniterm[]
+    +sequentialUniterms: Uniterm[]
+    +ngOnInit(): void
+    +loadUniterms(): void
+    +selectUniterm(id: number): void
+    +openAddDialog(): void
+    -processUniterms(uniterms: Uniterm[]): void
+    +handleMergeSelection(event: {index: number; result: string}): void
+  }
+  
+  class AddUnitermDialogComponent {
+    +unitermForm: FormGroup
+    +isEditMode: boolean
+    +separatorOptions: {value: string, label: string}[]
+    +onCancel(): void
+    +onSave(): void
+    -escapeRegExp(string: string): string
   }
 }
 
 UnitermService --> UnitermRepository
 UnitermController --> UnitermService
+UnitermController --> SecurityConfig
+
+UnitermVisualisationControllerComponent --> UnitermService
+UnitermVisualisationControllerComponent --> UnitermVisualisationComponent
+UnitermVisualisationControllerComponent --> UnitermMergeVisualizationComponent
+UnitermVisualisationControllerComponent --> AddUnitermDialogComponent
 @enduml
